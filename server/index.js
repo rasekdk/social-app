@@ -17,28 +17,11 @@ mongoose.connect(MONGODB_HOST, {
   useNewUrlParser: true,
 });
 
-app.post("/user/register", async (req, res) => {
-  const userName = req.body.name;
-  const userEmail = req.body.email;
-  const userPassword = req.body.password;
-  const userAvatar = req.body.avatar;
+const { userController } = require("./controllers/controllers");
 
-  const user = new UserModel({
-    name: userName,
-    email: userEmail,
-    password: userPassword,
-    avatar: userAvatar,
-  });
+app.post("/user/register", userController.register);
 
-  try {
-    await user.save();
-    res.send("inserted data");
-  } catch (err) {
-    console.log(err);
-  }
-});
-
-app.get("/read", async (req, res) => {
+app.get("/users", async (req, res) => {
   UserModel.find({}, (err, result) => {
     if (err) res.send(err);
     res.send(result);
