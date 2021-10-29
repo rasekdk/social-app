@@ -1,44 +1,20 @@
 // Rquire
-const Joi = require("joi");
 const jwt = require("jsonwebtoken");
 const bcrypt = require("bcryptjs");
 
 // Models
 const UserModel = require("../../models/userModel");
 
+// Hooks
+const checkNewUser = require("../../hooks/newUser.check");
+
 const register = async (req, res) => {
   try {
     const { name, email, password } = req.body;
 
-    // Check Data
-    const registerSchema = Joi.object({
-      name: Joi.string().regex(/^\S+$/).required(),
-      email: Joi.string().email().required(),
-      password: Joi.string().min(4).max(20).regex(/^\S+$/).required(),
-      repeatPassword: Joi.valid(Joi.ref("password")).required(),
-    });
+    // Check New User
 
-    await registerSchema.validateAsync(req.body);
-
-    // Check Unique
-    const [userName] = await UserModel.find({ name: name });
-    const [userEmail] = await UserModel.find({ email: email });
-
-    if (userName) {
-      const err = "used name";
-      const error = new Error(err);
-      error.status = 409;
-
-      throw error;
-    }
-
-    if (userEmail) {
-      const err = "used email";
-      const error = new Error(err);
-      error.status = 409;
-
-      throw error;
-    }
+    await checkNewUser(req.body);
 
     // Crypt Password
     const passwordHash = await bcrypt.hash(password, 10);
