@@ -6,16 +6,6 @@ import Home from "./components/Home";
 import NotFound from "./components/NotFound";
 
 function App() {
-  const { REACT_APP_API_URL } = process.env;
-
-  const [user, setUser] = useState([]);
-
-  useEffect(
-    () =>
-      Axios.get(`${REACT_APP_API_URL}/users`).then((res) => setUser(res.data)),
-    []
-  );
-
   return (
     <Router>
       <Switch>
