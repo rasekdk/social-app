@@ -21,11 +21,8 @@ const { userController } = require("./controllers/controllers");
 
 app.post("/user/register", userController.register);
 
-app.get("/users", async (req, res) => {
-  UserModel.find({}, (err, result) => {
-    if (err) res.send(err);
-    res.send(result);
-  });
-});
+app.post("/user/login", userController.login);
+
+app.get("/users", userController.getUsers);
 
 app.listen(3001, () => console.log("Server runnign on port 3001"));
