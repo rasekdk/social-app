@@ -14,7 +14,6 @@ const checkNewUser = async (user) => {
 
   // Check Unique
   const [userName] = await UserModel.find({ name: user.name });
-  const [userEmail] = await UserModel.find({ email: user.email });
 
   if (userName) {
     const err = "used name";
@@ -23,6 +22,8 @@ const checkNewUser = async (user) => {
 
     throw error;
   }
+
+  const [userEmail] = await UserModel.find({ email: user.email });
 
   if (userEmail) {
     const err = "used email";
