@@ -5,8 +5,6 @@ import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
 import Home from "./components/Home";
 import NotFound from "./components/NotFound";
 
-import "./App.css";
-
 function App() {
   const { REACT_APP_API_URL } = process.env;
 
