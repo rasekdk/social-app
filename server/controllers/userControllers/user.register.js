@@ -7,13 +7,13 @@ const UserModel = require("../../models/userModel");
 
 // Hooks
 const checkNewUser = require("../../hooks/newUser.check");
+const createUserToken = require("../../hooks/userToken.create");
 
 const register = async (req, res) => {
   try {
     const { name, email, password } = req.body;
 
     // Check New User
-
     await checkNewUser(req.body);
 
     // Crypt Password
@@ -27,17 +27,9 @@ const register = async (req, res) => {
     });
 
     // Save User
-    const newUser = await user.save();
+    await user.save();
 
-    // Generate JWT
-    const tokenPayload = {
-      id: newUser._id,
-      name: newUser.name,
-    };
-
-    const token = jwt.sign(tokenPayload, process.env.JWT_SECRET, {
-      expiresIn: "30d",
-    });
+    const token = createUserToken(user);
 
     // Response
     res.send({ auth: token });
