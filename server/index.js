@@ -23,6 +23,8 @@ app.post("/user/register", userController.register);
 
 app.post("/user/login", userController.login);
 
+app.delete("/user/delete", userController.deleteUser);
+
 app.get("/users", userController.getUsers);
 
 app.listen(3001, () => console.log("Server runnign on port 3001"));
