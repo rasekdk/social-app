@@ -1,5 +1,4 @@
 // Rquire
-const jwt = require("jsonwebtoken");
 const bcrypt = require("bcryptjs");
 
 // Models
@@ -9,9 +8,14 @@ const UserModel = require("../../models/userModel");
 const checkNewUser = require("../../hooks/newUser.check");
 const createUserToken = require("../../hooks/userToken.create");
 
+// Joi Schemas
+const schemaUserData = require("../../schemas/userData.schema");
+
 const register = async (req, res) => {
   try {
     const { name, email, password } = req.body;
+    // Check Data
+    await schemaUserData(req.body);
 
     // Check New User
     await checkNewUser(req.body);
@@ -32,7 +36,7 @@ const register = async (req, res) => {
     const token = createUserToken(user);
 
     // Response
-    res.send({ auth: token });
+    res.send({ msg: "user registered", auth: token });
   } catch (err) {
     console.log(err);
 

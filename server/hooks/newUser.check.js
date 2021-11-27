@@ -1,17 +1,10 @@
+// Requires
 const Joi = require("joi");
+
+// Models
 const UserModel = require("../models/userModel");
 
 const checkNewUser = async (user) => {
-  // Check Data
-  const registerSchema = Joi.object({
-    name: Joi.string().regex(/^\S+$/).required(),
-    email: Joi.string().email().required(),
-    password: Joi.string().min(4).max(20).regex(/^\S+$/).required(),
-    repeatPassword: Joi.valid(Joi.ref("password")).required(),
-  });
-
-  await registerSchema.validateAsync(user);
-
   // Check Unique
   const [userName] = await UserModel.find({ name: user.name });
 

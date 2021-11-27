@@ -1,20 +1,27 @@
+// Hooks
 const checkCorrectPassword = require("../../hooks/correctPassword.check");
 const checkLoginUser = require("../../hooks/loginUser.check");
 const createUserToken = require("../../hooks/userToken.create");
 
+// Joi Schemas
+const schemaLoginData = require("../../schemas/loginData.shcema");
+
 const login = async (req, res) => {
   try {
-    // Check Request Data
+    // Check Data
+    await schemaLoginData(req.body);
+
+    // Check User
     const userData = await checkLoginUser(req.body);
 
     // Check correct Password
-    await checkCorrectPassword(req.body, userData);
+    await checkCorrectPassword(req.body.password, userData.password);
 
     // Generate JWT
     const token = await createUserToken(userData, "30d");
 
     // Send Response
-    res.send({ auth: token });
+    res.send({ msg: "user loged", auth: token });
   } catch (err) {
     console.log(err);
 
