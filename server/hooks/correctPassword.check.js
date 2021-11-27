@@ -1,10 +1,8 @@
+// Require
 const bcrypt = require("bcryptjs");
 
-const checkCorrectPassword = async (bodyData, userData) => {
-  const correctPassword = await bcrypt.compare(
-    bodyData.password,
-    userData.password
-  );
+const checkCorrectPassword = async (bodyPassword, userPassword) => {
+  const correctPassword = await bcrypt.compare(bodyPassword, userPassword);
 
   if (!correctPassword) {
     const err = "wrong password";
